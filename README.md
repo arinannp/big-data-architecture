@@ -26,13 +26,13 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
         * https://github.com/bitnami/bitnami-docker-spark
 
 * `hadoop`: Hadoop sebagai Data Lake & Data Warehouse.
-  * Image: 
+    * Image: 
         * `docker-compose.yml`: teivah/hadoop:2.9.2
         * `docker-compose.yaml`: bde2020/hadoop
-  * Port: 50070
-  * References: 
-    * https://hub.docker.com/r/teivah/hadoop
-    * https://github.com/big-data-europe/docker-hadoop
+    * Port: 50070
+    * References: 
+        * https://hub.docker.com/r/teivah/hadoop
+        * https://github.com/big-data-europe/docker-hadoop
 
 
 ## Setup
