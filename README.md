@@ -35,122 +35,102 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
         * https://github.com/big-data-europe/docker-hadoop
 
 
-## Setup
-
-
-
-
-# Airflow Spark
-
-This project contains the following containers:
-
-* postgres: Postgres database for Airflow metadata and a Test database to test whatever you want.
-    * Image: postgres:9.6
-    * Database Port: 5432
-    * References: https://hub.docker.com/_/postgres
-
-* airflow-webserver: Airflow webserver and Scheduler.
-    * Image: docker-airflow-spark:1.10.7_3.0.1
-    * Port: 8282
-
-* spark: Spark Master.
-    * Image: bitnami/spark:3.0.1
-    * Port: 8181
-    * References: https://github.com/bitnami/bitnami-docker-spark
-
-* spark-worker-N: Spark workers. You can add workers copying the containers and changing the container name inside the docker-compose.yml file.
-    * Image: bitnami/spark:3.0.1
-    * References: https://github.com/bitnami/bitnami-docker-spark
-
-* jupyter-spark: Jupyter notebook with pyspark for interactive development.
-  * Image: jupyter/pyspark-notebook:3.0.1
-  * Port: 8888
-  * References: 
-    * https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-pyspark-notebook
-    * https://hub.docker.com/r/jupyter/pyspark-notebook/tags/
-
 ## Architecture components
 
-![](./doc/architecture.png "Architecture")
+![](./images/architecture.png "Big Data Architecture")
+
+
+## Requirements
+
+    * Docker
+    * Git (optional)
+
 
 ## Setup
 
 ### Clone project
 
-    $ git clone https://github.com/cordon-thiago/airflow-spark
+Jika Anda `Windows User` maka atur configurasi git agar menggunakan Unix-style dengan command:
+    
+    $ git config --global core.autocrlf false
 
-### Build airflow Docker
+Clone repository ini dengan command:
 
-Inside the airflow-spark/docker/docker-airflow
+    $ git clone https://github.com/arinannp/big-data-architecture.git
 
-    $ docker build --rm --force-rm -t docker-airflow-spark:1.10.7_3.0.1 .
 
-Optionally, you can override the arguments in the build to choose specific Spark, Hadoop and Airflow versions. As an example, here is how to build an image containing Airflow version `1.10.14`, Spark version `2.4.7` and Hadoop version `2.7`.
+### Build image dependencies
 
-    $ docker build --rm --force-rm \
-    -t docker-airflow-spark:1.10.14_2.4.7 . \
-    --build-arg AIRFLOW_VERSION=1.10.14 \
-    --build-arg SPARK_VERSION=2.4.7 \
-    --build-arg HADOOP_VERSION=2.7
+Pindah ke working direktori /big-data-architecture
 
-Spark and hadoop versions follow the versions as defined at Spark download page: https://spark.apache.org/downloads.html
+```Ada 2 docker-compose file untuk build & pull images, Anda bisa memilih salah satu```
+    
+    * Jika menggunakan `docker-compose.yaml` dengan image bde2020/hadoop, jalankan command:
+        
+        $ docker-compose -f docker-compose.yaml build
 
-Airflow versions can be found here: https://pypi.org/project/apache-airflow/#history
+    * Jika menggunakan `docker-compose.yml` dengan image teivah/hadoop:2.9.2, jalankan command:
+        
+        $ docker-compose -f docker-compose.yml build
 
-If you change the name or the tag of the docker image when building, remember to update the name/tag in docker-compose file.
 
-### Build Jupyter docker
-
-Inside the airflow-spark/docker/docker-jupyter
-
-    $ docker build --rm --force-rm -t jupyter/pyspark-notebook:3.0.1 .
-
-Optionally, you can override the arguments in the build to choose specific Spark and Hadoop versions. As an example, here is how to build an image containing Spark version `2.4.7` and Hadoop version `2.7`.
-
-    $ docker build --rm --force-rm \
-    -t jupyter/pyspark-notebook:2.4.7 . \
-    --build-arg spark_version=2.4.7 \
-    --build-arg hadoop_version=2.7
-
-Spark and hadoop versions follow the versions as defined at Spark download page: https://spark.apache.org/downloads.html
-
-If you change the name or the tag of the docker image when building, remember to update the name/tag in docker-compose file.
 ### Start containers
 
-Navigate to airflow-spark/docker and:
+Untuk running containers, Anda bisa jalankan command berikut
 
-    $ docker-compose up
+    * Jika Anda build images dengan file `docker-compose.yaml`, jalankan command:
+        
+        $ docker-compose -f docker-compose.yaml up -d
 
-If you want to run in background:
+    * Jika Anda build images dengan file `docker-compose.yml`, jalankan command:
+        
+        $ docker-compose -f docker-compose.yml up -d
 
-    $ docker-compose up -d
+Note: command -d digunakan agar running di background.
 
-Note: when running the docker-compose for the first time, the images postgres:9.6 and bitnami/spark:3.0.1 will be downloaded before the containers started.
 
-### Check if you can access
+### Check containers logs
 
-Airflow: http://localhost:8282
+Anda bisa cek logs dari containers yang sudah di build, apakah containers/apps tersebut sudah ready
 
-Spark Master: http://localhost:8181
+    * Jika Anda build containers dengan file `docker-compose.yaml`, jalankan command:
+        
+        $ docker-compose -f docker-compose.yaml logs --tail 10
 
-PostgreSql - Database Test:
+    * Jika Anda build containers dengan file `docker-compose.yml`, jalankan command:
+        
+        $ docker-compose -f docker-compose.yml logs --tail 10
 
-* Server: localhost:5432
-* Database: test
-* User: test
-* Password: postgres
+Note: command --tail 10 hanya menampilkan 10 logs terakhir.
 
-Postgres - Database airflow:
 
+### Access the containers that were built
+
+Airflow: http://localhost:8080
+
+Postgres - Database Airflow:
 * Server: localhost:5432
 * Database: airflow
 * User: airflow
 * Password: airflow
 
-Jupyter Notebook: http://127.0.0.1:8888
-  * For Jupyter notebook, you must copy the URL with the token generated when the container is started and paste in your browser. The URL with the token can be taken from container logs using:
-  
-        $ docker logs -f docker_jupyter-spark_1
+Spark Master: http://localhost:8181
+
+Hadoop Namenode: http://localhost:50070
+
+Postgres - Database Transactional (OLTP):
+* Server: localhost:5431
+* Database: digitalskola
+* User: digitalskola
+* Password: digitalskola
+
+
+
+
+
+
+
+
 
 ## How to run a DAG to test
 
