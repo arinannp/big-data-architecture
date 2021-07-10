@@ -35,17 +35,20 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
         * https://github.com/big-data-europe/docker-hadoop
 
 
-## Architecture components
+### .
+## Architecture Components
 
 ![](./images/architecture.png "Big Data Architecture")
 
 
+### .
 ## Requirements
 
 - Docker
 - Git (optional)
 
 
+### .
 ## Setup
 
 ### Clone project
@@ -104,7 +107,7 @@ Anda bisa cek logs dari containers yang sudah di build, apakah containers/apps t
 Note: command --tail 10 hanya menampilkan 10 logs terakhir.
 
 
-### Access the containers that were built
+### Access the containers/apps that were built
 
 Airflow: http://localhost:8080
 
@@ -125,104 +128,55 @@ Postgres - Database Transactional (OLTP):
 * Password: digitalskola
 
 
+### .
+## How to Run an End to End Pipeline
 
+1. Konfigurasi spark-connection melalui Airflow UI http://localhost:8080, klik Admin -> Connections
+    ![](./images/airflow_connections_menu.png "Airflow Connections")
 
+2. Cari `spark_default` connection dan klik Edit
+    ![](./images/airflow_spark_connection.png "Airflow Spark Connection")
 
+3. Lakukan konfigurasi seperti gambar, dan klik Save:
+    ![](./images/airflow_spark_config.png "Airflow Spark Connection")
 
-
-
-
-## How to run a DAG to test
-
-1. Configure spark connection acessing airflow web UI http://localhost:8282 and going to Connections
-   ![](./doc/airflow_connections_menu.png "Airflow Connections")
-
-2. Edit the spark_default connection inserting `spark://spark` in Host field and Port `7077`
-    ![](./doc/airflow_spark_connection.png "Airflow Spark connection")
-
-3. Run the spark-test DAG
+4. Run end_to_end_pipeline DAG
+    ![](./images/run_airflow_dag.png "Run Airflow DAG")
    
-4. Check the DAG log for the task spark_job. You will see the result printed in the log
-   ![](./doc/airflow_dag_log.png "Airflow log")
+5. Check Airflow DAG Tree View
+    ![](./images/airflow_dag_tree.png "Airflow Tree View")
 
-5. Check the spark application in the Spark Master web UI (http://localhost:8181)
-   ![](./doc/spark_master_app.png "Spark Master UI")
+6. Check Spark Task Id Logs 
+    ![](./images/airflow_dag_spark_logs.png "Airflow Spark Job Logs")
 
+7. Check apakah data sudah tersimpan di Hadoop HDFS 
+    ![](./images/output_spark_job.png "HDFS Browse Directory")
+
+
+### .
 ## How to run the Spark Apps via spark-submit
-After started your docker containers, run the command below in your terminal:
+Anda juga bisa menjalankan Spark Jobs secara manual melalui CLI, dengan command:
 ```
-$ docker exec -it docker_spark_1 spark-submit --master spark://spark:7077 <spark_app_path> [optional]<list_of_app_args>
-```
-
-Example running the hellop-world.py application:
-```
-$ docker exec -it docker_spark_1 spark-submit --master spark://spark:7077 /usr/local/spark/app/hello-world.py /usr/local/spark/resources/data/airflow.cfg
+$ docker exec -it spark spark-submit --driver-class-path /usr/local/spark/connectors/postgresql-9.4.1207.jar --jars /usr/local/spark/connectors/postgresql-9.4.1207.jar /usr/local/spark/pipeline/etl_process.py
 ```
 
-## Increasing the number of Spark Workers
 
-You can increase the number of Spark workers just adding new services based on `bitnami/spark:3.0.1` image to the `docker-compose.yml` file like following:
+### .
+## Stops and Removes Containers, Networks & Volumes
+Anda bisa menghapus container hasil dari `docker-compose up` dengan command berikut
 
-```
-spark-worker-n:
-        image: bitnami/spark:3.0.1
-        user: root
-        networks:
-            - default_net
-        environment:
-            - SPARK_MODE=worker
-            - SPARK_MASTER_URL=spark://spark:7077
-            - SPARK_WORKER_MEMORY=1G
-            - SPARK_WORKER_CORES=1
-            - SPARK_RPC_AUTHENTICATION_ENABLED=no
-            - SPARK_RPC_ENCRYPTION_ENABLED=no
-            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-            - SPARK_SSL_ENABLED=no
-        volumes:
-            - ../spark/app:/usr/local/spark/app # Spark scripts folder (Must be the same path in airflow and Spark Cluster)
-            - ../spark/resources/data:/usr/local/spark/resources/data #Data folder (Must be the same path in airflow and Spark Cluster)
+- Jika Anda build containers dengan file `docker-compose.yaml`, jalankan command:
+        
+        $ docker-compose -f docker-compose.yaml down
 
-```
+- Jika Anda build containers dengan file `docker-compose.yml`, jalankan command:
+        
+        $ docker-compose -f docker-compose.yml down
 
-## Adding Airflow Extra packages
 
-Rebuild Dockerfile (in this example, adding GCP extra):
-
-    $ docker build --rm --build-arg AIRFLOW_DEPS="gcp" -t docker-airflow-spark:1.10.7_3.0.1 .
-
-After successfully built, run docker-compose to start container:
-
-    $ docker-compose up
-
-More info at: https://github.com/puckel/docker-airflow#build
-
-## Useful docker commands
-
-    List Images:
-    $ docker images <repository_name>
-
-    List Containers:
-    $ docker container ls
-
-    Check container logs:
-    $ docker logs -f <container_name>
-
-    To build a Dockerfile after changing sth (run inside directoty containing Dockerfile):
-    $ docker build --rm -t <tag_name> .
-
-    Access container bash:
-    $ docker exec -i -t <container_name> /bin/bash
-
-## Useful docker-compose commands
-
-    Start Containers:
-    $ docker-compose -f <compose-file.yml> up -d
-
-    Stop Containers:
-    $ docker-compose -f <compose-file.yml> down --remove-orphans
-    
-# Extras
-## Spark + Postgres sample
-
-* The DAG [spark-postgres.py](dags/spark-postgres.py) loads [movies.csv](spark/resources/data/movies.csv) and [ratings.csv](spark/resources/data/ratings.csv) data into Postgres tables and query these tables to generate a list of top 10 movies with more rates.
-  * This DAG runs the load-postgres.py and read-postgres.py applications. These applications are also available in the notebooks [load-postgres-notebook.ipynb](notebooks/load-postgres-notebook.ipynb) and [read-postgres-notebook.ipynb](notebooks/read-postgres-notebook.ipynb).
+### .
+### .
+## References
+* https://github.com/cordon-thiago/airflow-spark
+* https://github.com/big-data-europe/docker-hadoop
+* https://github.com/puckel/docker-airflow 
