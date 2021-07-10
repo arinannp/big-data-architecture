@@ -149,7 +149,7 @@ Postgres - Database Transactional (OLTP):
 6. Check Spark Task Id Logs 
     ![](./images/airflow_dag_spark_logs.png "Airflow Spark Job Logs")
 
-7. Check apakah data sudah tersimpan di Hadoop HDFS 
+7. Check apakah data sudah tersimpan di Hadoop HDFS UI http://localhost:50070
     ![](./images/output_spark_job.png "HDFS Browse Directory")
 
 
