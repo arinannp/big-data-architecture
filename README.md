@@ -42,8 +42,8 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
 
 ## Requirements
 
-    * Docker
-    * Git (optional)
+- Docker
+- Git (optional)
 
 
 ## Setup
@@ -65,11 +65,11 @@ Pindah ke working direktori /big-data-architecture
 
 ```Ada 2 docker-compose file untuk build & pull images, Anda bisa memilih salah satu```
     
-    * Jika menggunakan `docker-compose.yaml` dengan image bde2020/hadoop, jalankan command:
+- Jika menggunakan `docker-compose.yaml` dengan image bde2020/hadoop, jalankan command:
         
         $ docker-compose -f docker-compose.yaml build
 
-    * Jika menggunakan `docker-compose.yml` dengan image teivah/hadoop:2.9.2, jalankan command:
+- Jika menggunakan `docker-compose.yml` dengan image teivah/hadoop:2.9.2, jalankan command:
         
         $ docker-compose -f docker-compose.yml build
 
@@ -78,11 +78,11 @@ Pindah ke working direktori /big-data-architecture
 
 Untuk running containers, Anda bisa jalankan command berikut
 
-    * Jika Anda build images dengan file `docker-compose.yaml`, jalankan command:
+- Jika Anda build images dengan file `docker-compose.yaml`, jalankan command:
         
         $ docker-compose -f docker-compose.yaml up -d
 
-    * Jika Anda build images dengan file `docker-compose.yml`, jalankan command:
+- Jika Anda build images dengan file `docker-compose.yml`, jalankan command:
         
         $ docker-compose -f docker-compose.yml up -d
 
@@ -93,11 +93,11 @@ Note: command -d digunakan agar running di background.
 
 Anda bisa cek logs dari containers yang sudah di build, apakah containers/apps tersebut sudah ready
 
-    * Jika Anda build containers dengan file `docker-compose.yaml`, jalankan command:
+- Jika Anda build containers dengan file `docker-compose.yaml`, jalankan command:
         
         $ docker-compose -f docker-compose.yaml logs --tail 10
 
-    * Jika Anda build containers dengan file `docker-compose.yml`, jalankan command:
+- Jika Anda build containers dengan file `docker-compose.yml`, jalankan command:
         
         $ docker-compose -f docker-compose.yml logs --tail 10
 
