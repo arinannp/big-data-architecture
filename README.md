@@ -49,7 +49,7 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
 
 
 ### .
-## Setup
+## Set-up
 
 ### Clone project
 
@@ -160,6 +160,13 @@ Anda juga bisa menjalankan Spark Jobs secara manual melalui CLI, dengan command:
 $ docker exec -it spark spark-submit --driver-class-path /usr/local/spark/connectors/postgresql-9.4.1207.jar --jars /usr/local/spark/connectors/postgresql-9.4.1207.jar /usr/local/spark/pipeline/etl_process.py
 ```
 
+### .
+## Source Code
+- Main ETL spark code: 
+- Source data validations code:
+- Result data validation code:
+- DAG code file:
+
 
 ### .
 ## Stops and Removes Containers, Networks & Volumes
@@ -174,7 +181,6 @@ Anda bisa menghapus container hasil dari `docker-compose up` dengan command beri
         $ docker-compose -f docker-compose.yml down
 
 
-### .
 ### .
 ## References
 * https://github.com/cordon-thiago/airflow-spark
