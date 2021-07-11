@@ -107,7 +107,7 @@ Anda bisa cek logs dari containers yang sudah di build, apakah containers/apps t
 Note: command --tail 10 hanya menampilkan 10 logs terakhir.
 
 
-### Access the containers/apps that were built
+### Access the containers or apps that were built
 
 Airflow: http://localhost:8080
 
@@ -137,16 +137,16 @@ Postgres - Database Transactional (OLTP):
 2. Cari `spark_default` connection dan klik Edit
     ![](./images/airflow_spark_connection.png "Airflow Spark Connection")
 
-3. Lakukan konfigurasi seperti gambar, dan klik Save:
+3. Lakukan konfigurasi seperti gambar (Host spark://spark, Port 7077), dan klik Save:
     ![](./images/airflow_spark_config.png "Airflow Spark Connection")
 
-4. Run end_to_end_pipeline DAG
+4. Run Airflow DAG end_to_end_pipeline 
     ![](./images/run_airflow_dag.png "Run Airflow DAG")
    
-5. Check Airflow DAG Tree View
+5. Check Airflow DAG tree view
     ![](./images/airflow_dag_tree.png "Airflow Tree View")
 
-6. Check Spark Task Id Logs 
+6. Check Spark task id logs 
     ![](./images/airflow_dag_spark_logs.png "Airflow Spark Job Logs")
 
 7. Check apakah data sudah tersimpan di Hadoop HDFS UI http://localhost:50070
@@ -157,7 +157,7 @@ Postgres - Database Transactional (OLTP):
 ## How to run the Spark Apps via spark-submit
 Anda juga bisa menjalankan Spark Jobs secara manual melalui CLI, dengan command:
 ```
-$ docker exec -it spark spark-submit --driver-class-path /usr/local/spark/connectors/postgresql-9.4.1207.jar --jars /usr/local/spark/connectors/postgresql-9.4.1207.jar /usr/local/spark/pipeline/etl_process.py
+$ docker exec -it spark spark-submit --master spark://spark:7077 --driver-class-path /usr/local/spark/connectors/postgresql-9.4.1207.jar --jars /usr/local/spark/connectors/postgresql-9.4.1207.jar /usr/local/spark/pipeline/etl_process.py
 ```
 
 ### .
