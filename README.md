@@ -167,9 +167,9 @@ $ docker exec -it spark spark-submit --master spark://spark:7077 /usr/local/spar
 
 ### .
 ## Data Modeling Datawarehouse
-Source data schema dari Postgres OLTP [disini](https://www.kaggle.com/usdot/flight-delays?select=flights.csv).
+Source data schema dari Postgres OLTP [2015 Flight Delays and Cancellations](https://www.kaggle.com/usdot/flight-delays?select=flights.csv).
 
-Data Warehouse Modeling menggunakan combine dari konsep dari [Ralph Kimball & Bill Inmon](https://www.astera.com/type/blog/data-warehouse-concepts/).
+Data Warehouse Modeling menggunakan *combine* konsep dari [Ralph Kimball & Bill Inmon](https://www.astera.com/type/blog/data-warehouse-concepts/).
 
 - Fact Table (denormalize table flights dan airlines).
 
