@@ -162,10 +162,10 @@ $ docker exec -it spark spark-submit --master spark://spark:7077 --driver-class-
 
 ### .
 ## Source Code
-- Main ETL spark code: 
-- Source data validations code:
-- Result data validation code:
-- DAG code file:
+- Main ETL spark code: https://github.com/arinannp/big-data-architecture/blob/main/pipeline/etl_process.py
+- Source data validations code: https://github.com/arinannp/big-data-architecture/blob/main/dags/validations/source_validation.py
+- Result data validation code: https://github.com/arinannp/big-data-architecture/blob/main/dags/validations/result_validation.py
+- DAG code file: https://github.com/arinannp/big-data-architecture/blob/main/dags/etl_flow_dag.py
 
 
 ### .
