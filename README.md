@@ -181,7 +181,7 @@ Data Warehouse Modeling menggunakan *combine* konsep dari [Ralph Kimball & Bill 
 
 - Data Warehouses HDFS path.
 
-    ![](./images/hdfs_path.png "Schema Dims Table")
+    ![](./images/hdfs_path.png "HDFS Path")
 
 
 ### .
