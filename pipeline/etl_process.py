@@ -7,9 +7,10 @@ from datetime import datetime
 
 projectDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+#Notes: .master("local[*]") bisa dihapus jika ingin berjalan di Spark Master (localhost:8181) spark://spark:7077
 spark = SparkSession \
     .builder \
+    .master("local[*]") \
     .config("spark.hadoop.dfs.client.use.datanode.hostname", "true") \
     .config('spark.driver.extraClassPath', os.path.join(projectDir, 'connectors/postgresql-9.4.1207.jar')) \
     .appName('Batch Pipeline ETL').getOrCreate()
@@ -88,13 +89,6 @@ dfAirports.write.csv(os.path.join(projectDir, f"output/AirportsDim_{partitionDat
                                     mode='overwrite',
                                     header=True)
 
-dfOriginAirportAgg.repartition(1).write.csv(os.path.join(projectDir, f"output/DataMartOriginAirport_{partitionDate}"),
-                                    mode='overwrite',
-                                    header=True)
-
-dfDestinationAirportAgg.repartition(1).write.csv(os.path.join(projectDir, f"output/DataMartDestinationAirport_{partitionDate}"),
-                                    mode='overwrite',
-                                    header=True)
 # Write Parquet to Hadoop HDFS
 dfFlightsAirlinesNew.write.parquet(f"hdfs://hadoop:9000/output/FlightsAirlinesFact_{partitionDate}", 
                                    partitionBy='airline',
