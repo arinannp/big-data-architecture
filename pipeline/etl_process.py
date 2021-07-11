@@ -7,7 +7,7 @@ from datetime import datetime
 
 projectDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-#Notes: .master("local[*]") bisa dihapus jika ingin berjalan di Spark Master (localhost:8181) spark://spark:7077
+#Notes: .master("local[*]") bisa dihapus jika ingin berjalan di Spark Standalone Cluster (localhost:8181) spark://spark:7077
 spark = SparkSession \
     .builder \
     .master("local[*]") \

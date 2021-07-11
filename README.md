@@ -43,10 +43,10 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
 
 ### .
 ## Requirements
-
+```
 - Docker
 - Git (optional)
-
+```
 
 ### .
 ## Set-up
@@ -165,13 +165,28 @@ Test Code From datasets/*csv to Hadoop HDFS
 $ docker exec -it spark spark-submit --master spark://spark:7077 /usr/local/spark/pipeline/etl_test.py
 ```
 
+### .
+## Data Modeling Datawarehouse
+Source data schema dari Postgres OLTP [disini](https://www.kaggle.com/usdot/flight-delays?select=flights.csv).
+
+Data Warehouse Modeling menggunakan combine dari konsep dari [Ralph Kimball & Bill Inmon](https://www.astera.com/type/blog/data-warehouse-concepts/)
+
+Fact Table (denormalize table flights dan airlines)
+    ![](./images/fact_table.png "Schema Fact Table")
+
+Dimensional Table (table airports)
+    ![](./images/dims_table.png "Schema Dims Table")
+
+Data Warehouse on HDFS path
+    ![](./images/hdfs_path.png "Schema Dims Table")
+
 
 ### .
 ## Source Code
-- Main ETL spark code: https://github.com/arinannp/big-data-architecture/blob/main/pipeline/etl_process.py
-- Source data validations code: https://github.com/arinannp/big-data-architecture/blob/main/dags/validations/source_validation.py
-- Result data validation code: https://github.com/arinannp/big-data-architecture/blob/main/dags/validations/result_validation.py
-- DAG code file: https://github.com/arinannp/big-data-architecture/blob/main/dags/etl_flow_dag.py
+- Main ETL spark code: [pipeline/etl_process.py](https://github.com/arinannp/big-data-architecture/blob/main/pipeline/etl_process.py)
+- Source data validations code: [dags/validations/source_validation.py](https://github.com/arinannp/big-data-architecture/blob/main/dags/validations/source_validation.py)
+- Result data validation code: [dags/validations/result_validation.py](https://github.com/arinannp/big-data-architecture/blob/main/dags/validations/result_validation.py)
+- DAG code file: [dags/etl_flow_dag.py](https://github.com/arinannp/big-data-architecture/blob/main/dags/etl_flow_dag.py)
 
 
 ### .
