@@ -158,11 +158,13 @@ Postgres - Database Transactional (OLTP):
 Anda juga bisa menjalankan Spark Jobs secara manual melalui CLI, dengan command:
 ```
 $ docker exec -it spark spark-submit --master spark://spark:7077 --driver-class-path /usr/local/spark/connectors/postgresql-9.4.1207.jar --jars /usr/local/spark/connectors/postgresql-9.4.1207.jar /usr/local/spark/pipeline/etl_process.py
+```
 
 Test Code From datasets/*csv to Hadoop HDFS
-
+```
 $ docker exec -it spark spark-submit --master spark://spark:7077 /usr/local/spark/pipeline/etl_test.py
 ```
+
 
 ### .
 ## Source Code
