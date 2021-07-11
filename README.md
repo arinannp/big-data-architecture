@@ -134,7 +134,7 @@ Postgres - Database Transactional (OLTP) [source](https://www.kaggle.com/usdot/f
 1. Konfigurasi spark-connection melalui Airflow UI http://localhost:8080, *klik Admin -> Connections*
     ![](./images/airflow_connections_menu.png "Airflow Connections")
 
-2. Cari `spark_default` connection dan klik Edit
+2. Cari `spark_default` connection dan *klik Edit*
     ![](./images/airflow_spark_connection.png "Airflow Spark Connection")
 
 3. Lakukan konfigurasi seperti gambar (Host spark://spark, Port 7077), dan *klik Save*:
@@ -179,7 +179,7 @@ Data Warehouse Modeling menggunakan combine dari konsep dari [Ralph Kimball & Bi
 
     ![](./images/dims_table.png "Schema Dims Table")
 
-- Data Warehouse on HDFS path.
+- Data Warehouses HDFS path.
 
     ![](./images/hdfs_path.png "Schema Dims Table")
 
