@@ -172,12 +172,15 @@ Source data schema dari Postgres OLTP [disini](https://www.kaggle.com/usdot/flig
 Data Warehouse Modeling menggunakan combine dari konsep dari [Ralph Kimball & Bill Inmon](https://www.astera.com/type/blog/data-warehouse-concepts/).
 
 - Fact Table (denormalize table flights dan airlines).
+
     ![](./images/fact_table.png "Schema Fact Table")
 
 - Dimensional Table (table airports).
+
     ![](./images/dims_table.png "Schema Dims Table")
 
 - Data Warehouse on HDFS path.
+
     ![](./images/hdfs_path.png "Schema Dims Table")
 
 
