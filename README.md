@@ -43,10 +43,10 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
 
 ### .
 ## Requirements
-```
-- Docker
-- Git (optional)
-```
+
+- **Docker**
+- **Git (optional)**
+
 
 ### .
 ## Set-up
@@ -64,7 +64,7 @@ Clone repository ini dengan command:
 
 ### Build image dependencies
 
-Pindah ke working direktori /big-data-architecture
+Pindah ke working direktori */big-data-architecture*
 
 ```Ada 2 docker-compose file untuk build & pull images, Anda bisa memilih salah satu```
     
@@ -121,7 +121,7 @@ Spark Master: http://localhost:8181
 
 Hadoop Namenode: http://localhost:50070
 
-Postgres - Database Transactional (OLTP):
+Postgres - Database Transactional (OLTP) [source](https://www.kaggle.com/usdot/flight-delays?select=flights.csv):
 * Server: localhost:5431
 * Database: digitalskola
 * User: digitalskola
@@ -131,13 +131,13 @@ Postgres - Database Transactional (OLTP):
 ### .
 ## How to Run an End to End Pipeline
 
-1. Konfigurasi spark-connection melalui Airflow UI http://localhost:8080, klik Admin -> Connections
+1. Konfigurasi spark-connection melalui Airflow UI http://localhost:8080, *klik Admin -> Connections*
     ![](./images/airflow_connections_menu.png "Airflow Connections")
 
 2. Cari `spark_default` connection dan klik Edit
     ![](./images/airflow_spark_connection.png "Airflow Spark Connection")
 
-3. Lakukan konfigurasi seperti gambar (Host spark://spark, Port 7077), dan klik Save:
+3. Lakukan konfigurasi seperti gambar (Host spark://spark, Port 7077), dan *klik Save*:
     ![](./images/airflow_spark_config.png "Airflow Spark Connection")
 
 4. Run Airflow DAG end_to_end_pipeline 
