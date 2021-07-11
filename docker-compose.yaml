@@ -1,0 +1,229 @@
+version: '3.8'
+
+services:
+    postgres-db:
+        container_name: postgres-db
+        image: postgres:13.2
+        environment:
+            - POSTGRES_USER=digitalskola
+            - POSTGRES_PASSWORD=digitalskola
+            - POSTGRES_DB=digitalskola
+        logging:
+            options:
+                max-size: 10m
+                max-file: "3"
+        volumes:
+            - ./sql:/docker-entrypoint-initdb.d/
+        ports:
+            - "5431:5432"
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "digitalskola"]
+            interval: 5s
+            retries: 5
+        restart: always
+        networks: 
+            - app_network
+
+    postgres:
+        container_name: postgres
+        image: postgres:13.2
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        logging:
+            options:
+                max-size: 10m
+                max-file: "3"
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "airflow"]
+            interval: 5s
+            retries: 5
+        restart: always
+        networks: 
+            - app_network
+
+    webserver:
+        container_name: airflow
+        build: ./
+        depends_on:
+            - postgres-db
+            - postgres
+        environment:
+            - LOAD_EX=y
+            - EXECUTOR=Local
+        logging:
+            options:
+                max-size: 10m
+                max-file: "3"
+        volumes:
+            - ./dags/.:/usr/local/airflow/dags
+            - ./airflow/airflow.cfg:/usr/local/airflow/airflow.cfg
+            - ./requirements.txt:/requirements.txt
+            - ./datasets:/usr/local/spark/datasets
+            - ./pipeline:/usr/local/spark/pipeline
+            - ./connectors:/usr/local/spark/connectors
+            - ./dags/output:/usr/local/spark/output
+        ports:
+            - "8080:8080"
+            - "4040:4040"
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+        restart: always
+        networks: 
+            - app_network
+    
+    spark:
+        image: docker.io/bitnami/spark:3
+        container_name: spark
+        hostname: spark
+        user: root
+        environment:
+            - SPARK_MODE=master
+            - SPARK_RPC_AUTHENTICATION_ENABLED=no
+            - SPARK_RPC_ENCRYPTION_ENABLED=no
+            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+            - SPARK_SSL_ENABLED=no
+        volumes:
+            - ./datasets:/usr/local/spark/datasets
+            - ./pipeline:/usr/local/spark/pipeline
+            - ./connectors:/usr/local/spark/connectors
+            - ./dags/output:/usr/local/spark/output
+        ports:
+            - '8181:8080'
+        restart: always
+        networks: 
+            - app_network
+        
+    spark-worker-1:
+        image: docker.io/bitnami/spark:3
+        container_name: spark-worker-1
+        user: root
+        environment:
+            - SPARK_MODE=worker
+            - SPARK_MASTER_URL=spark://spark:7077
+            - SPARK_WORKER_MEMORY=1G
+            - SPARK_WORKER_CORES=1
+            - SPARK_RPC_AUTHENTICATION_ENABLED=no
+            - SPARK_RPC_ENCRYPTION_ENABLED=no
+            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+            - SPARK_SSL_ENABLED=no
+        volumes:
+            - ./datasets:/usr/local/spark/datasets
+            - ./pipeline:/usr/local/spark/pipeline
+            - ./connectors:/usr/local/spark/connectors
+            - ./dags/output:/usr/local/spark/output
+        restart: always
+        networks: 
+            - app_network
+    
+    spark-worker-2:
+        image: docker.io/bitnami/spark:3
+        container_name: spark-worker-2
+        user: root
+        environment:
+            - SPARK_MODE=worker
+            - SPARK_MASTER_URL=spark://spark:7077
+            - SPARK_WORKER_MEMORY=1G
+            - SPARK_WORKER_CORES=1
+            - SPARK_RPC_AUTHENTICATION_ENABLED=no
+            - SPARK_RPC_ENCRYPTION_ENABLED=no
+            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+            - SPARK_SSL_ENABLED=no
+        volumes:
+            - ./datasets:/usr/local/spark/datasets
+            - ./pipeline:/usr/local/spark/pipeline
+            - ./connectors:/usr/local/spark/connectors
+            - ./dags/output:/usr/local/spark/output
+        restart: always
+        networks: 
+            - app_network
+    
+    namenode:
+        image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+        container_name: namenode
+        hostname: hadoop
+        restart: always
+        ports:
+            - 50070:9870
+            - 9000:9000
+        volumes:
+            - hadoop_namenode:/hadoop/dfs/name
+        environment:
+            - CLUSTER_NAME=test
+        env_file:
+            - ./hadoop/hadoop.env
+        networks: 
+            - app_network
+    
+    datanode:
+        image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+        container_name: datanode
+        restart: always
+        ports:
+            - 9864:9864
+        volumes:
+            - hadoop_datanode:/hadoop/dfs/data
+            - ./dags/output:/hadoop/output-data
+        environment:
+            SERVICE_PRECONDITION: "namenode:9870"
+        env_file:
+            - ./hadoop/hadoop.env
+        networks: 
+            - app_network
+        
+    resourcemanager:
+        image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+        container_name: resourcemanager
+        restart: always
+        ports:
+            - 8088:8088
+        environment:
+            SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864"
+        env_file:
+            - ./hadoop/hadoop.env
+        networks: 
+            - app_network
+    
+    nodemanager1:
+        image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+        container_name: nodemanager
+        restart: always
+        ports:
+            - 8042:8042
+        environment:
+            SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
+        env_file:
+            - ./hadoop/hadoop.env
+        networks: 
+            - app_network
+        
+    historyserver:
+        image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
+        container_name: historyserver
+        restart: always
+        ports:
+            - 8188:8188
+        environment:
+            SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
+        volumes:
+            - hadoop_historyserver:/hadoop/yarn/timeline
+        env_file:
+            - ./hadoop/hadoop.env
+        networks: 
+            - app_network
+        
+volumes:
+    hadoop_namenode:
+    hadoop_datanode:
+    hadoop_historyserver:
+
+networks:
+    app_network:
+        name: pipeline_net
