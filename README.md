@@ -44,9 +44,9 @@ Project ini menggunakan beberapa referensi `image` atau `container` berikut:
 ### .
 ## Requirements
 
-- **Docker**
-- **Docker Compose**
-- **Git (optional)**
+- *Docker*
+- *Docker Compose*
+- *Git (optional)*
 
 
 ### .
