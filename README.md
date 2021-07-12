@@ -171,6 +171,9 @@ Source data schema dari Postgres OLTP [2015 Flight Delays and Cancellations](htt
 
 Data Warehouse Modeling menggunakan *combine* konsep dari [Ralph Kimball & Bill Inmon](https://www.astera.com/type/blog/data-warehouse-concepts/).
 
+![](./images/erd.png "Schema Fact Table")
+
+
 - Fact Table (denormalize table flights dan airlines).
 
     ![](./images/fact_table.png "Schema Fact Table")
