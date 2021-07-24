@@ -62,6 +62,10 @@ Clone repository ini dengan command:
 
     $ git clone https://github.com/arinannp/big-data-architecture.git
 
+Make sure untuk jalankan command berikut bagi `Mac-os User` dan `Linux User`:
+
+    $ sudo chmod 755 airflow/entrypoint.sh
+
 
 ### Build image dependencies
 
