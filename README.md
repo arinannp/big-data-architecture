@@ -136,25 +136,31 @@ Postgres - Database Transactional (OLTP) [source](https://www.kaggle.com/usdot/f
 ### .
 ## How to Run an End to End Pipeline
 
-1. Konfigurasi spark-connection melalui Airflow UI http://localhost:8080, *klik Admin -> Connections*
+1. Setting pepipost smtp credential *smtp_user* dan *smtp_password* di file [airflow/airflow.cfg](https://github.com/arinannp/big-data-architecture/blob/main/airflow/airflow.cfg) (jika belum punya account bisa mendaftar di https://www.pepipost.com/)
+    ![](./images/smtp_host.png "SMTP Credential")
+
+2. Jika Anda sudah mendaftarkan/verifikasi email sebagai subscription, Anda bisa merubah task dag send_email di file [dags/etl_flow_dag.py](https://github.com/arinannp/big-data-architecture/blob/main/dags/etl_flow_dag.py)
+    ![](./images/send_mail.png "Mail Subs")
+
+3. Konfigurasi spark-connection melalui Airflow UI http://localhost:8080, *klik Admin -> Connections*
     ![](./images/airflow_connections_menu.png "Airflow Connections")
 
-2. Cari `spark_default` connection dan *klik Edit*
+4. Cari `spark_default` connection dan *klik Edit*
     ![](./images/airflow_spark_connection.png "Airflow Spark Connection")
 
-3. Lakukan konfigurasi seperti gambar (Host spark://spark, Port 7077), dan *klik Save*:
+5. Lakukan konfigurasi seperti gambar (Host spark://spark, Port 7077), dan *klik Save*:
     ![](./images/airflow_spark_config.png "Airflow Spark Connection")
 
-4. Run Airflow DAG end_to_end_pipeline 
+6. Run Airflow DAG end_to_end_pipeline 
     ![](./images/run_airflow_dag.png "Run Airflow DAG")
    
-5. Check Airflow DAG tree view
+7. Check Airflow DAG tree view
     ![](./images/airflow_dag_tree.png "Airflow Tree View")
 
-6. Check Spark task id logs 
+8. Check Spark task id logs 
     ![](./images/airflow_dag_spark_logs.png "Airflow Spark Job Logs")
 
-7. Check apakah data sudah tersimpan di Hadoop HDFS UI http://localhost:50070
+9. Check apakah data sudah tersimpan di Hadoop HDFS UI http://localhost:50070
     ![](./images/output_spark_job.png "HDFS Browse Directory")
 
 
