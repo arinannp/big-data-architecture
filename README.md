@@ -139,7 +139,7 @@ Postgres - Database Transactional (OLTP) [source](https://www.kaggle.com/usdot/f
 1. Setting pepipost smtp credential *smtp_user* dan *smtp_password* di file [airflow/airflow.cfg](https://github.com/arinannp/big-data-architecture/blob/main/airflow/airflow.cfg) (jika belum punya account bisa mendaftar di https://www.pepipost.com/)
     ![](./images/smtp_host.png "SMTP Credential")
 
-2. Jika Anda sudah mendaftarkan/verifikasi email sebagai subscription, Anda bisa merubah task dag send_email di file [dags/etl_flow_dag.py](https://github.com/arinannp/big-data-architecture/blob/main/dags/etl_flow_dag.py)
+2. Jika Anda sudah mendaftarkan/verifikasi email sebagai subscription di https://www.pepipost.com/, Anda bisa merubah task dag send_email melalui file [dags/etl_flow_dag.py](https://github.com/arinannp/big-data-architecture/blob/main/dags/etl_flow_dag.py)
     ![](./images/send_mail.png "Mail Subs")
 
 3. Konfigurasi spark-connection melalui Airflow UI http://localhost:8080, *klik Admin -> Connections*
